@@ -43,7 +43,7 @@ function getDogColor(event) {
         dogColor = event.target.value;
     }
     else {
-        dogColor = $("#sel-cordog option:selected").val();
+        dogColor = $("#sel-cordog option:selected").val(); 
     }
     $("#id-dogname").css("color", dogColor);
 }
@@ -87,6 +87,8 @@ function initialize() {
     }
     else {
         getDogPicture(undefined);
+        getDogColor(undefined);
+        getDogFont(undefined);
     }
 }
 
