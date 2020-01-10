@@ -1,4 +1,8 @@
 function getDogBreeds() {
+    /**
+     * populates dropdown menu with dog breeds from dogAPI
+     * and calls initialize function
+     */
     $.get("https://dog.ceo/api/breeds/list/all", function(data, status) {
         if (status == "success") {
             var html = "";
@@ -15,6 +19,11 @@ function getDogBreeds() {
 }
 
 function getDogPicture(dogBreed) {
+    /**
+     * gets dog picture url from dogAPI and updates image on html
+     * if dogBreed is not defined, gets a random image
+     * @param dogBreed: string breed name or undefined
+     */
     var dogBreedUrl = "https://dog.ceo/api/breed/" + dogBreed + "/images/random";
     if (!dogBreed) {
         dogBreedUrl = "https://dog.ceo/api/breeds/image/random"
@@ -30,13 +39,21 @@ function getDogPicture(dogBreed) {
     })
 }
 
-function getDogName(event) {
+function setDogName(event) {
+    /**
+     * updates dog name on image based on input value
+     * @param event: object event change from input
+     */
     var dogName = "";
     dogName = event.target.value;
     $("#id-dogname").text(dogName);
 }
 
-function getDogColor(event) {
+function setDogColor(event) {
+    /** 
+     * sets font color selected on dropdown menu
+     * @param event: object event change from select or undefined 
+     */
     var dogColor;
     
     if (event) {
@@ -49,6 +66,10 @@ function getDogColor(event) {
 }
 
 function getDogFont(event) {
+    /**
+     * sets font value selected on dropdown menu
+     * @param event: object event change from select or undefined 
+     */
     var dogFont;
 
     if (event) {
@@ -60,7 +81,10 @@ function getDogFont(event) {
     $("#id-dogname").css("font-family", dogFont);
 }
 
-function saveDog(event) {
+function saveDog() {
+    /**
+     * saves input data to local storage
+     */
     var saveDogData = {
         dogPicture: $("#img-dogpic").attr("src"),
         dogName: $("#ipt-nomedog").val(),
@@ -73,6 +97,9 @@ function saveDog(event) {
 }
 
 function initialize() {
+    /** 
+     * sets initial value based on local storage or sets default values
+     */
     var initialData = localStorage.getItem("saveDogData");
     if (initialData) {
         initialData = JSON.parse(initialData);
@@ -82,36 +109,33 @@ function initialize() {
         $("#sel-cordog").val(initialData.dogColor);
         $("#sel-fonte").val(initialData.dogFont);
         $("#id-dogname").text(initialData.dogName);
-        getDogColor(undefined);
+        setDogColor(undefined);
         getDogFont(undefined);
     }
     else {
         getDogPicture(undefined);
-        getDogColor(undefined);
+        setDogColor(undefined);
         getDogFont(undefined);
     }
 }
 
 $(document).ready(function() {
-    $("#alert").hide();
-    getDogBreeds();
+    $("#alert").hide();  // hides alert component
+    getDogBreeds();  // loads initial values
     
-    $("#ipt-nomedog").change(getDogName);
-    
-    $("#sel-cordog").change(getDogColor);
-
+    /**
+     * assign events to html objects
+     */
+    $("#ipt-nomedog").change(setDogName);
+    $("#sel-cordog").change(setDogColor);
     $("#sel-fonte").change(getDogFont);
-
     $("#sel-racadog").change(function(event) {
         getDogPicture(event.target.value);
     });
-
     $("#btn-gravar").click(saveDog);
-
     $("#btn-refresh").click(function() {
         getDogPicture($("#sel-racadog").val());
     });
-
     $("#alert-close").click(function() {
         $("#alert").hide("slow");
     })
